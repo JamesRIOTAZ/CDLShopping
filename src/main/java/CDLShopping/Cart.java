@@ -10,19 +10,23 @@ public class Cart {
 		cartItems = new ArrayList<>();
 	}
 	
-	public void addItem(String name, int value){
-		CartItem item = new CartItem(value, name);
+	public void addItem(Item tempItem){
+		CartItem item = new CartItem(tempItem.getValue(), tempItem.getName());
 		cartItems.add(item);
 	}
 	
-	public boolean checkDiscount(String name, int quantity){
-		int totalItems = countItems(name);
-		return (totalItems % quantity==0);
+	public boolean checkDiscount(Item tempItem){
+		int totalItems = countItems(tempItem.getName());
+		return (totalItems % tempItem.getDiscountQuanity()==0);
 	}
 	
-	public void addDiscount(String name, int value){
-		CartItem item = new CartItem(value, "Discount for "+name);
-			cartItems.add(item);
+	public void addDiscount(Item tempItem){
+		CartItem item = new CartItem(tempItem.getValue(), "Discount for "+tempItem.getName());
+		cartItems.add(item);
+	}
+	
+	public List<CartItem> getCartItems() {
+		return cartItems;
 	}
 	
 	private int countItems(String name){

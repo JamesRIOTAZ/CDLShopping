@@ -8,7 +8,7 @@ import java.util.Locale;
 
 public class Main {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		
 		//set item values
 		Item itemA = new Item("A");
@@ -42,6 +42,7 @@ public class Main {
 			
 		} catch (IOException e) {
 			e.printStackTrace();
+			throw e;
 		}
 
 	}
@@ -130,11 +131,11 @@ public class Main {
 			userItem = userInput.getRawText("Item not found, please iten anohter item:");
 		}
 		Item tempItem = checkForItem(userItem, itemList);
-		cart.addItem(tempItem.getName(), tempItem.getValue());
+		cart.addItem(tempItem);
 		System.out.println("added "+tempItem.getName()+" to cart at a price of "+formatAsCurrency(tempItem.getValue()));
 		if(tempItem.isDiscount()){
-			if(cart.checkDiscount(tempItem.getName(), tempItem.getDiscountQuanity())){
-				cart.addDiscount(tempItem.getName(), tempItem.getTotalDiscount());
+			if(cart.checkDiscount(tempItem)){
+				cart.addDiscount(tempItem);
 				System.out.println("added discount for "+tempItem.getDiscountQuanity()+" of item "+tempItem.getName()+" at "+formatAsCurrency(tempItem.getTotalDiscount()));
 			}
 		}
