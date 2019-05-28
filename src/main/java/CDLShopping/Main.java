@@ -16,8 +16,8 @@ public class Main {
 		Item itemD = new Item("D");
 		
 		//set discounts
-		itemA.setDiscount(130, 3);
-		itemB.setDiscount(45, 2);
+		//itemA.setDiscount(130, 3);
+		//itemB.setDiscount(45, 2);
 		
 		ArrayList<Item> itemList = new ArrayList<>();
 		itemList.add(itemA);
@@ -33,11 +33,21 @@ public class Main {
 			
 			for(Item tempItem : itemList) {
 				System.out.println("Please enter a price (in pence) for item "+tempItem.getName()+":");
-				String value = reader.readLine();
-				while(!validValue(value)) {
-					value = reader.readLine();
+				String input = reader.readLine();
+				while(!validValue(input)) {
+					System.out.println("Invalid number, it must be an integer greater than 0. Please try again:");
+					input = reader.readLine();
 				}
-				tempItem.setValue(Integer.parseInt(value));
+				tempItem.setValue(Integer.parseInt(input));
+				
+				System.out.println("Is there a special offer on this item? Y / N:");
+				input = reader.readLine();
+				while(validYN(input)<0) {
+					System.out.println("Invalid answer, please answer Y or N:");
+					input = reader.readLine();
+				}
+				
+				System.out.println("How many items required for a discount?");
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -49,16 +59,23 @@ public class Main {
 		boolean valid = false;
 	    try {
 	    	int num = Integer.parseInt(value);
-	    	if(num <=0) {
-	    		System.out.println("Value must be greater than 0, please try again:");
-	    	}
-	    	else {
-	    		valid = true;
-	    	}
+	    		if(num >0) {
+	    			valid = true;
+	    		}
 	    } catch (NumberFormatException ex){
-	        System.out.println("The value must be a integer greater than 0, please try again:");
 	    }
 	    return valid;
 	 }
+	
+	public static int validYN(String input) {
+		input = input.toUpperCase();
+		if(input.equals("Y")|| input.equals("YES")) {
+			return 2;
+		}
+		if(input.equals("N")|| input.equals("NO")) {
+			return 1;
+		}
+		return -1;
+	}
 
 }
