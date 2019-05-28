@@ -1,9 +1,8 @@
 package CDLShopping;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.List;
 
 public class Main {
 
@@ -25,57 +24,53 @@ public class Main {
 		itemList.add(itemC);
 		itemList.add(itemD);
 		
+		Cart cart = new Cart();
+		
 		System.out.println("Welcome to the CDL shop");
 		System.out.println("Please set pricing rules");
 		
 		try {
-			BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-			
+			ConsoleInput userInput = new ConsoleInput();
 			for(Item tempItem : itemList) {
-				System.out.println("Please enter a price (in pence) for item "+tempItem.getName()+":");
-				String input = reader.readLine();
-				while(!validValue(input)) {
-					System.out.println("Invalid number, it must be an integer greater than 0. Please try again:");
-					input = reader.readLine();
-				}
-				tempItem.setValue(Integer.parseInt(input));
+			
+				tempItem.setValue(userInput.getPositiveInt("Please enter a price (in pence) for item "+tempItem.getName()+":"));
+				boolean isDiscount = userInput.isYes("Is there a special offer on this item? Y / N:");
 				
-				System.out.println("Is there a special offer on this item? Y / N:");
-				input = reader.readLine();
-				while(validYN(input)<0) {
-					System.out.println("Invalid answer, please answer Y or N:");
-					input = reader.readLine();
+				if(isDiscount){
+					int discountQuanity = userInput.getPositiveInt("How many items required for a discount:");
+					int discountPrice = userInput.getPositiveInt("What is the discount price?");
+					tempItem.setDiscount(discountPrice, discountQuanity);
 				}
-				
-				System.out.println("How many items required for a discount?");
 			}
+			System.out.println("All values set");
+			System.out.println();
+			
+			while(true){
+				String userItem = userInput.getRawText("Enter a item to buy:");
+				while(checkForItem(userItem, itemList)==null){
+					userItem = userInput.getRawText("Item not found, please iten anohter item:");
+				}
+				Item tempItem = checkForItem(userItem, itemList);
+				cart.addItem(tempItem.getName(), tempItem.getValue());
+				if(tempItem.isDiscount()){
+					cart.checkDiscount(tempItem.getName(), tempItem.getDiscountQuanity(), tempItem.getTotalDiscount());
+				}
+				System.out.println(cart.getTotal());
+			}
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
 	}
 	
-	public static boolean validValue(String value) {
-		boolean valid = false;
-	    try {
-	    	int num = Integer.parseInt(value);
-	    		if(num >0) {
-	    			valid = true;
-	    		}
-	    } catch (NumberFormatException ex){
-	    }
-	    return valid;
-	 }
-	
-	public static int validYN(String input) {
-		input = input.toUpperCase();
-		if(input.equals("Y")|| input.equals("YES")) {
-			return 2;
+	public static Item checkForItem(String findThis, List<Item> itemList){
+		for(Item tempItem : itemList){
+			if(tempItem.getName().equals(findThis)){
+				return tempItem;
+			}
 		}
-		if(input.equals("N")|| input.equals("NO")) {
-			return 1;
-		}
-		return -1;
+		return null;
 	}
-
+	
 }

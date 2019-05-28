@@ -8,6 +8,7 @@ public class Item {
 	private boolean discount;
 	private int discountPrice;
 	private int discountQuanity;
+	private int totalDiscount;
 	
 	public Item(String name){
 		this.name = name;
@@ -16,6 +17,7 @@ public class Item {
 	public void setDiscount(int discountPrice, int discountQuanity) {
 		this.discountPrice = discountPrice;
 		this.discountQuanity = discountQuanity;
+		this.totalDiscount = discountPrice - (value * discountQuanity);
 		this.discount = true;
 	}
 	
@@ -43,5 +45,8 @@ public class Item {
 	public int getDiscountQuanity() {
 		return discountQuanity;
 	}
-	
+
+	public int getTotalDiscount() {
+		return totalDiscount;
+	}
 }
