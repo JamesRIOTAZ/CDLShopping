@@ -1,6 +1,7 @@
 package CDLShopping;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Cart {
 
@@ -14,13 +15,14 @@ public class Cart {
 		cartItems.add(item);
 	}
 	
-	public void checkDiscount(String name, int quantity, int value){
+	public boolean checkDiscount(String name, int quantity){
 		int totalItems = countItems(name);
-
-		if(totalItems % quantity==0){
-			CartItem item = new CartItem(value, "Discount for "+name);
+		return (totalItems % quantity==0);
+	}
+	
+	public void addDiscount(String name, int value){
+		CartItem item = new CartItem(value, "Discount for "+name);
 			cartItems.add(item);
-		}
 	}
 	
 	private int countItems(String name){
