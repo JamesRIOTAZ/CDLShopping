@@ -1,8 +1,10 @@
 package CDLShopping;
 
 import java.io.IOException;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class Main {
 
@@ -36,7 +38,7 @@ public class Main {
 			}
 			
 			scanItems(userInput, itemList, cart);
-			System.out.println("Total cost is "+cart.getTotal());
+			System.out.println("Total cost is "+"Cart total is "+formatAsCurrency(cart.getTotal()));
 			
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -47,11 +49,24 @@ public class Main {
 	private static void setNewPriceRules(List<Item> itemList, ConsoleInput userInput) throws IOException{
 		for(Item tempItem : itemList) {
 			tempItem.setValue(userInput.getPositiveInt("Please enter a price (in pence) for item "+tempItem.getName()+":"));
-			boolean isDiscount = userInput.isYes("Is there a special offer on this item? Y / N:");
-			if(isDiscount){
-				int discountQuanity = userInput.getPositiveInt("How many items required for a discount:");
-				int discountPrice = userInput.getPositiveInt("What is the discount price?");
-				tempItem.setDiscount(discountPrice, discountQuanity);
+			if(tempItem.getValue()==1) {
+				System.out.println("Price too low for discount");
+			}
+			else {
+				boolean isDiscount = userInput.isYes("Is there a special offer on this item? Y / N:");
+				if(isDiscount){
+					boolean validDiscount = false;
+					while(!validDiscount) {
+						int discountQuanity = userInput.getPositiveInt("How many items required for a discount:");
+						int discountPrice = userInput.getPositiveInt("What is the discount price?");
+							validDiscount = tempItem.validDiscount(discountPrice, discountQuanity);
+							if(validDiscount) {
+								tempItem.setDiscount(discountPrice, discountQuanity);
+							}else {
+								System.out.println("Discount is not valid, it must be less than the value of the items");
+							}
+					}
+				}
 			}
 		}
 		System.out.println("All values set");
@@ -91,14 +106,14 @@ public class Main {
 				}
 				Item tempItem = checkForItem(userItem, itemList);
 				cart.addItem(tempItem.getName(), tempItem.getValue());
-				System.out.println("added "+tempItem.getName()+" to cart at a price of "+tempItem.getValue());
+				System.out.println("added "+tempItem.getName()+" to cart at a price of "+formatAsCurrency(tempItem.getValue()));
 				if(tempItem.isDiscount()){
 					if(cart.checkDiscount(tempItem.getName(), tempItem.getDiscountQuanity())){
 					cart.addDiscount(tempItem.getName(), tempItem.getTotalDiscount());
-					System.out.println("added discount for "+tempItem.getDiscountQuanity()+" of item "+tempItem.getName()+" at "+tempItem.getTotalDiscount());
+					System.out.println("added discount for "+tempItem.getDiscountQuanity()+" of item "+tempItem.getName()+" at "+formatAsCurrency(tempItem.getTotalDiscount()));
 					}
 				}
-				System.out.println("Cart total is "+cart.getTotal());
+				System.out.println("Cart total is "+formatAsCurrency(cart.getTotal()));
 			}
 		}
 	}
@@ -110,6 +125,12 @@ public class Main {
 			}
 		}
 		return null;
+	}
+	
+	private static String formatAsCurrency(int covertValue) {
+		double amountPounds = (double)covertValue / 100;
+        NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(Locale.UK);
+        return currencyFormat.format(amountPounds);
 	}
 	
 }

@@ -51,7 +51,6 @@ public class ConsoleInput {
 	
 	private boolean isYesNo(String input){
 		input = input.toUpperCase();
-		System.out.println(input);
 		if(input.equals("Y")|| input.equals("YES")) {
 			return true;
 		}

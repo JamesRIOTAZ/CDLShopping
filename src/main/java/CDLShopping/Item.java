@@ -21,6 +21,10 @@ public class Item {
 		this.discount = true;
 	}
 	
+	public boolean validDiscount(int discountPrice, int discountQuanity) {
+		return ((value * discountQuanity)>discountPrice);
+	}
+	
 	public String getName() {
 		return name;
 	}

@@ -42,7 +42,7 @@ public class Cart {
 		}
 		return total;
 	}
-
+	
 }
 
 class CartItem {
