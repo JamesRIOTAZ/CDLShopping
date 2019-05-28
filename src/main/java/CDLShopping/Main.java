@@ -31,32 +31,58 @@ public class Main {
 		
 		try {
 			ConsoleInput userInput = new ConsoleInput();
-			for(Item tempItem : itemList) {
 			
-				tempItem.setValue(userInput.getPositiveInt("Please enter a price (in pence) for item "+tempItem.getName()+":"));
-				boolean isDiscount = userInput.isYes("Is there a special offer on this item? Y / N:");
-				
-				if(isDiscount){
-					int discountQuanity = userInput.getPositiveInt("How many items required for a discount:");
-					int discountPrice = userInput.getPositiveInt("What is the discount price?");
-					tempItem.setDiscount(discountPrice, discountQuanity);
+			if(userInput.isYes("Do you want to set new price rules? Y / N:")){
+				for(Item tempItem : itemList) {
+					tempItem.setValue(userInput.getPositiveInt("Please enter a price (in pence) for item "+tempItem.getName()+":"));
+					boolean isDiscount = userInput.isYes("Is there a special offer on this item? Y / N:");
+					if(isDiscount){
+						int discountQuanity = userInput.getPositiveInt("How many items required for a discount:");
+						int discountPrice = userInput.getPositiveInt("What is the discount price?");
+						tempItem.setDiscount(discountPrice, discountQuanity);
+					}
+				}
+				System.out.println("All values set");
+				System.out.println();
+			}
+			else {
+				System.out.println("Setting default values");
+				for(Item tempItem : itemList) {
+					String name = tempItem.getName();
+					switch (name){
+					case "A": tempItem.setValue(50);
+						      tempItem.setDiscount(130, 3);
+						      break;
+					case "B": tempItem.setValue(30);
+				      		  tempItem.setDiscount(45, 2);
+				              break;
+					case "C": tempItem.setValue(20);
+							  break;
+					case "D": tempItem.setValue(15);
+					  		  break;
+					default:
+					}
 				}
 			}
-			System.out.println("All values set");
-			System.out.println();
 			
-			while(true){
-				String userItem = userInput.getRawText("Enter a item to buy:");
-				while(checkForItem(userItem, itemList)==null){
-					userItem = userInput.getRawText("Item not found, please iten anohter item:");
+			boolean scanItems = true;
+			while(scanItems){
+				String userItem = userInput.getRawText("Enter a item to scan or type buy to pay:");
+				if(userItem.equalsIgnoreCase("buy")){
+					scanItems = false;
 				}
-				Item tempItem = checkForItem(userItem, itemList);
-				cart.addItem(tempItem.getName(), tempItem.getValue());
-				if(tempItem.isDiscount()){
-					cart.checkDiscount(tempItem.getName(), tempItem.getDiscountQuanity(), tempItem.getTotalDiscount());
-				}
-				System.out.println(cart.getTotal());
+				else
+					while(checkForItem(userItem, itemList)==null){
+						userItem = userInput.getRawText("Item not found, please iten anohter item:");
+					}
+					Item tempItem = checkForItem(userItem, itemList);
+					cart.addItem(tempItem.getName(), tempItem.getValue());
+					if(tempItem.isDiscount()){
+						cart.checkDiscount(tempItem.getName(), tempItem.getDiscountQuanity(), tempItem.getTotalDiscount());
+					}
+					System.out.println(cart.getTotal());
 			}
+			System.out.println("Total cost is "+cart.getTotal());
 			
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -66,7 +92,7 @@ public class Main {
 	
 	public static Item checkForItem(String findThis, List<Item> itemList){
 		for(Item tempItem : itemList){
-			if(tempItem.getName().equals(findThis)){
+			if(tempItem.getName().equalsIgnoreCase(findThis)){
 				return tempItem;
 			}
 		}
