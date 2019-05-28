@@ -53,20 +53,7 @@ public class Main {
 				System.out.println("Price too low for discount");
 			}
 			else {
-				boolean isDiscount = userInput.isYes("Is there a special offer on this item? Y / N:");
-				if(isDiscount){
-					boolean validDiscount = false;
-					while(!validDiscount) {
-						int discountQuanity = userInput.getPositiveInt("How many items required for a discount:");
-						int discountPrice = userInput.getPositiveInt("What is the discount price?");
-							validDiscount = tempItem.validDiscount(discountPrice, discountQuanity);
-							if(validDiscount) {
-								tempItem.setDiscount(discountPrice, discountQuanity);
-							}else {
-								System.out.println("Discount is not valid, it must be less than the value of the items");
-							}
-					}
-				}
+				addDiscount(userInput, tempItem);
 			}
 		}
 		System.out.println("All values set");
@@ -101,19 +88,7 @@ public class Main {
 				scanningItems = false;
 			}
 			else{
-				while(checkForItem(userItem, itemList)==null){
-					userItem = userInput.getRawText("Item not found, please iten anohter item:");
-				}
-				Item tempItem = checkForItem(userItem, itemList);
-				cart.addItem(tempItem.getName(), tempItem.getValue());
-				System.out.println("added "+tempItem.getName()+" to cart at a price of "+formatAsCurrency(tempItem.getValue()));
-				if(tempItem.isDiscount()){
-					if(cart.checkDiscount(tempItem.getName(), tempItem.getDiscountQuanity())){
-					cart.addDiscount(tempItem.getName(), tempItem.getTotalDiscount());
-					System.out.println("added discount for "+tempItem.getDiscountQuanity()+" of item "+tempItem.getName()+" at "+formatAsCurrency(tempItem.getTotalDiscount()));
-					}
-				}
-				System.out.println("Cart total is "+formatAsCurrency(cart.getTotal()));
+				addItemToCart(userInput, itemList, cart, userItem);
 			}
 		}
 	}
@@ -131,6 +106,39 @@ public class Main {
 		double amountPounds = (double)covertValue / 100;
         NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(Locale.UK);
         return currencyFormat.format(amountPounds);
+	}
+	
+	private static void addDiscount(ConsoleInput userInput, Item tempItem) throws IOException {
+		boolean isDiscount = userInput.isYes("Is there a special offer on this item? Y / N:");
+		if(isDiscount){
+			boolean validDiscount = false;
+			while(!validDiscount) {
+				int discountQuanity = userInput.getPositiveInt("How many items required for a discount:");
+				int discountPrice = userInput.getPositiveInt("What is the discount price?");
+				validDiscount = tempItem.validDiscount(discountPrice, discountQuanity);
+					if(validDiscount) {
+						tempItem.setDiscount(discountPrice, discountQuanity);
+					}else {
+						System.out.println("Discount is not valid, it must be less than the value of the items");
+					}
+			}
+		}
+	}
+	
+	private static void addItemToCart(ConsoleInput userInput, List<Item> itemList, Cart cart, String userItem) throws IOException {
+		while(checkForItem(userItem, itemList)==null){
+			userItem = userInput.getRawText("Item not found, please iten anohter item:");
+		}
+		Item tempItem = checkForItem(userItem, itemList);
+		cart.addItem(tempItem.getName(), tempItem.getValue());
+		System.out.println("added "+tempItem.getName()+" to cart at a price of "+formatAsCurrency(tempItem.getValue()));
+		if(tempItem.isDiscount()){
+			if(cart.checkDiscount(tempItem.getName(), tempItem.getDiscountQuanity())){
+				cart.addDiscount(tempItem.getName(), tempItem.getTotalDiscount());
+				System.out.println("added discount for "+tempItem.getDiscountQuanity()+" of item "+tempItem.getName()+" at "+formatAsCurrency(tempItem.getTotalDiscount()));
+			}
+		}
+		System.out.println("Cart total is "+formatAsCurrency(cart.getTotal()));
 	}
 	
 }
