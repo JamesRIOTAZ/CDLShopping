@@ -1,4 +1,4 @@
-package CDLShopping;
+package cdl.shopping;
 
 import java.io.BufferedReader;
 import java.io.IOException;

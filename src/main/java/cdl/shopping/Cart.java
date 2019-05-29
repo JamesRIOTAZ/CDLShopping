@@ -1,4 +1,4 @@
-package CDLShopping;
+package cdl.shopping;
 
 import java.util.ArrayList;
 import java.util.List;

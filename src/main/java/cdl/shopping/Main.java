@@ -1,4 +1,4 @@
-package CDLShopping;
+package cdl.shopping;
 
 import java.io.IOException;
 import java.text.NumberFormat;
@@ -9,6 +9,8 @@ import java.util.Locale;
 public class Main {
 
 	public static void main(String[] args) throws IOException {
+		
+		
 		
 		//set item values
 		Item itemA = new Item("A");
@@ -133,7 +135,7 @@ public class Main {
 		Item tempItem = checkForItem(userItem, itemList);
 		cart.addItem(tempItem);
 		System.out.println("added "+tempItem.getName()+" to cart at a price of "+formatAsCurrency(tempItem.getValue()));
-		if(tempItem.isDiscount()){
+		if(tempItem.hasDiscount()){
 			if(cart.checkDiscount(tempItem)){
 				cart.addDiscount(tempItem);
 				System.out.println("added discount for "+tempItem.getDiscountQuanity()+" of item "+tempItem.getName()+" at "+formatAsCurrency(tempItem.getTotalDiscount()));

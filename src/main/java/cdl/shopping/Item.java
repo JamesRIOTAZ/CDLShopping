@@ -1,4 +1,4 @@
-package CDLShopping;
+package cdl.shopping;
 
 public class Item {
 
@@ -14,11 +14,32 @@ public class Item {
 		this.name = name;
 	}
 	
+	public Item(String name, int value){
+		this.name = name;
+		this.value = value;
+	}
+	
+	public Item(String name, int value, int discountPrice, int discountQuanity){
+		this.name = name;
+		this.value = value;
+		setDiscount(discountPrice, discountQuanity);
+	}
+	
+	public void resetValues(){
+		discount = false;
+		value = 0;
+		discountPrice = 0;
+		discountQuanity  = 0;
+		totalDiscount = 0;
+	}
+	
 	public void setDiscount(int discountPrice, int discountQuanity) {
-		this.discountPrice = discountPrice;
-		this.discountQuanity = discountQuanity;
-		this.totalDiscount = discountPrice - (value * discountQuanity);
-		this.discount = true;
+		if(validDiscount(discountPrice, discountQuanity)) {
+			this.discountPrice = discountPrice;
+			this.discountQuanity = discountQuanity;
+			this.totalDiscount = discountPrice - (value * discountQuanity);
+			this.discount = true;
+		}
 	}
 	
 	public boolean validDiscount(int discountPrice, int discountQuanity) {
@@ -38,7 +59,7 @@ public class Item {
 		this.value = value;
 	}
 
-	public boolean isDiscount() {
+	public boolean hasDiscount() {
 		return discount;
 	}
 
