@@ -11,9 +11,9 @@ import java.util.Locale;
 public class Shop {
 	
 	//instance variables
-	ItemInventory inventory;
-	Cart cart;
-	ConsoleInput userInput;
+	private ItemInventory inventory;
+	private Cart cart;
+	private ConsoleInput userInput;
 	
 	/**
 	 * Instantiate the cart, inventory and userInput classes
@@ -22,6 +22,12 @@ public class Shop {
 		cart = new Cart();
 		inventory = new ItemInventory();
 		userInput = new ConsoleInput();
+	}
+	
+	public Shop(ConsoleInput userInput) {
+		cart = new Cart();
+		inventory = new ItemInventory();
+		this.userInput = userInput;
 	}
 	
 	/**
@@ -156,6 +162,10 @@ public class Shop {
 		double amountPounds = (double)covertValue / 100;
         NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(Locale.UK);
         return currencyFormat.format(amountPounds);
+	}
+	
+	protected ItemInventory getItemInventory() {
+		return inventory;
 	}
 
 }

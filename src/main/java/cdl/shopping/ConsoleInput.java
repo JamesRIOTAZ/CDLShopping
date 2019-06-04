@@ -20,6 +20,10 @@ public class ConsoleInput {
 		reader = new BufferedReader(new InputStreamReader(System.in));
 	}
 	
+	public ConsoleInput(BufferedReader reader) {
+		this.reader = reader;
+	}
+	
 	/**
 	 * Ask user for input and than loop until they enter a valued number
 	 * 
