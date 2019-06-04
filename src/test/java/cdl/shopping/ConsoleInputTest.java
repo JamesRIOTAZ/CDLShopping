@@ -46,6 +46,47 @@ public class ConsoleInputTest {
 		assertEquals(2, result);
 	}
 	
+	@Test
+	public void testisYesTrue() throws IOException {
+		ConsoleInput testSubject = new ConsoleInput(new BufferedReader(new StringReader("Yes")));
+		assertTrue(testSubject.isYes("Testing Yes"));
+	}
+	
+	@Test
+	public void testisNofalse() throws IOException {
+		ConsoleInput testSubject = new ConsoleInput(new BufferedReader(new StringReader("no")));
+		assertFalse(testSubject.isYes("Testing no"));
+	}	
+	@Test
+	public void testisYTrue() throws IOException {
+		ConsoleInput testSubject = new ConsoleInput(new BufferedReader(new StringReader("y")));
+		assertTrue(testSubject.isYes("Testing y"));
+	}
+	
+	@Test
+	public void testisNfalse() throws IOException {
+		ConsoleInput testSubject = new ConsoleInput(new BufferedReader(new StringReader("n")));
+		assertFalse(testSubject.isYes("Testing n"));
+	}
+	
+	@Test
+	public void testisYesInvalid() throws IOException {
+		ConsoleInput testSubject = new ConsoleInput(new BufferedReader(new StringReader("Pie\nyes")));
+		assertTrue(testSubject.isYes("Testing yep Yes"));
+	}
+	
+	@Test
+	public void testRawText() throws IOException {
+		ConsoleInput testSubject = new ConsoleInput(new BufferedReader(new StringReader("hello")));
+		assertEquals("hello", testSubject.getRawText("Test raw text"));
+	}
+	
+	@Test
+	public void testRawTextNothing() throws IOException {
+		ConsoleInput testSubject = new ConsoleInput(new BufferedReader(new StringReader("")));
+		assertNull(testSubject.getRawText("Test no text"));
+	}
+	
 	
 	
 }

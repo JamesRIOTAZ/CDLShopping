@@ -167,5 +167,9 @@ public class Shop {
 	protected ItemInventory getItemInventory() {
 		return inventory;
 	}
+	
+	protected Cart getCart() {
+		return cart;
+	}
 
 }

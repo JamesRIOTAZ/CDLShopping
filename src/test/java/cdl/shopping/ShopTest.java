@@ -121,5 +121,32 @@ public class ShopTest {
 		assertEquals(discountQuantity, item.getDiscountQuantity());
 		assertEquals(totalDiscount, item.getTotalDiscount());
 	}
-
+	
+	@Test
+	public void testScanItems() throws IOException {
+		ConsoleInput input = new ConsoleInput(new BufferedReader(new StringReader("a\nb\nc\nd\nbuy")));
+		Shop testShop = new Shop(input);
+		testShop.scanItems();
+		Cart testCart = testShop.getCart();
+		assertEquals(115, testCart.getTotal());
+	}
+	
+	@Test
+	public void testScanItemsWithInvlidItem() throws IOException {
+		ConsoleInput input = new ConsoleInput(new BufferedReader(new StringReader("a\nh\nb\nc\nd\nh\nbuy\nbuy")));
+		Shop testShop = new Shop(input);
+		testShop.scanItems();
+		Cart testCart = testShop.getCart();
+		assertEquals(115, testCart.getTotal());
+	}
+	
+	@Test
+	public void testScanItemsWithDiscount() throws IOException {
+		ConsoleInput input = new ConsoleInput(new BufferedReader(new StringReader("a\na\na\nb\nc\nd\nbuy")));
+		Shop testShop = new Shop(input);
+		testShop.scanItems();
+		Cart testCart = testShop.getCart();
+		assertEquals(195, testCart.getTotal());
+	}
+	
 }

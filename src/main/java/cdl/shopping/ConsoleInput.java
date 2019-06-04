@@ -59,7 +59,7 @@ public class ConsoleInput {
 			System.out.println("Invalid answer, please answer Y or N:");
 			input = reader.readLine();
 		}
-		return (input.toUpperCase().equals("Y") || (input.toUpperCase().equals("Yes")));
+		return (input.toUpperCase().equals("Y") || (input.toUpperCase().equals("YES")));
 	}
 	
 	/**
